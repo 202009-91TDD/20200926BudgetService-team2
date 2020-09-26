@@ -120,6 +120,19 @@ namespace _20200926BudgetService
             ShouldBe(491);
         }
 
+        [Test]
+        public void CrossYear()
+        {
+            GivenBudgets(new List<Budget>
+            {
+                new Budget {YearMonth = "201912", Amount = 3100},
+                new Budget {YearMonth = "202001", Amount = 31}
+            });
+            GivenDatePeriod(new DateTime(2019, 12, 31), new DateTime(2020, 1, 1));
+
+            ShouldBe(101);
+        }
+
         // 非法起迄
         [Test]
         public void InvalidDate()
