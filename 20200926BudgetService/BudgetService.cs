@@ -30,8 +30,7 @@ namespace _20200926BudgetService
             {
                 amount = (decimal) _repo.GetAll().FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount;
 
-                var daysInMonth = GetDays(start);
-                return amount / daysInMonth;
+                return amount / GetDays(start);
             }
 
             if (IsSameMonth(start, end))
