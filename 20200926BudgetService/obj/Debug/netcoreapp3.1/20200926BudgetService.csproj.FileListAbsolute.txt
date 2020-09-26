@@ -1,0 +1,5 @@
+D:\20200926_Joey\20200926BudgetService\20200926BudgetService\bin\Debug\netcoreapp3.1\20200926BudgetService.deps.json
+D:\20200926_Joey\20200926BudgetService\20200926BudgetService\bin\Debug\netcoreapp3.1\20200926BudgetService.dll
+D:\20200926_Joey\20200926BudgetService\20200926BudgetService\obj\Debug\netcoreapp3.1\20200926BudgetService.csprojAssemblyReference.cache
+D:\20200926_Joey\20200926BudgetService\20200926BudgetService\obj\Debug\netcoreapp3.1\20200926BudgetService.AssemblyInfoInputs.cache
+D:\20200926_Joey\20200926BudgetService\20200926BudgetService\obj\Debug\netcoreapp3.1\20200926BudgetService.AssemblyInfo.cs
