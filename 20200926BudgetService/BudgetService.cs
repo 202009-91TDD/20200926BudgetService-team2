@@ -20,17 +20,16 @@ namespace _20200926BudgetService
                 return 0;
             }
 
-            decimal amount;
             if (IsSameDay(start, end))
             {
-                amount = (decimal) _repo.GetAll().FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount;
-                return amount / GetDays(start);
+                return (decimal) _repo.GetAll().FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount /
+                       GetDays(start);
             }
 
             if (IsSameMonth(start, end))
             {
-                amount = (decimal) _repo.GetAll().FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount;
-                return amount / GetDays(start) * ((end - start).Days + 1);
+                return (decimal) _repo.GetAll().FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount /
+                    GetDays(start) * ((end - start).Days + 1);
             }
 
 
