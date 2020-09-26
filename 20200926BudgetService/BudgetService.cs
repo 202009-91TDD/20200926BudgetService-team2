@@ -20,8 +20,7 @@ namespace _20200926BudgetService
                 return 0;
             }
 
-            var result = _repo.GetAll();
-            if (!result.Any())
+            if (!_repo.GetAll().Any())
             {
                 return 0;
             }
@@ -29,7 +28,7 @@ namespace _20200926BudgetService
             decimal amount;
             if (IsSameDay(start, end))
             {
-                amount = (decimal) result.FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount;
+                amount = (decimal) _repo.GetAll().FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount;
 
                 var daysInMonth = GetDays(start);
                 return amount / daysInMonth;
@@ -37,20 +36,14 @@ namespace _20200926BudgetService
 
             if (IsSameMonth(start, end))
             {
-                amount = (decimal) result.FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount;
+                amount = (decimal) _repo.GetAll().FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount;
                 return amount / GetDays(start) * ((end - start).Days + 1);
             }
 
-            var startDatePortion = GetStartDatePortion(start);
-            var firstMonthBudget =
-                (decimal) result.FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount;
 
-            var endDatePortion = GetEndDatePortion(end);
-            var secondMonthBudget = (decimal) result.FirstOrDefault(x => x.YearMonth == end.ToString("yyyyMM"))?.Amount;
-
-            return GetStartMonthBudget(start, firstMonthBudget, startDatePortion) +
-                   GetSecondMonthBudget(end, secondMonthBudget, endDatePortion) +
-                   GetEntireMonthBudget(start, end, result);
+            return GetStartMonthBudget(start) +
+                   GetSecondMonthBudget(end) +
+                   GetEntireMonthBudget(start, end);
         }
 
         private static int GetEndDatePortion(DateTime end)
@@ -63,22 +56,24 @@ namespace _20200926BudgetService
             return GetDays(start) - start.Day + 1;
         }
 
-        private decimal GetEntireMonthBudget(DateTime start, DateTime end, IEnumerable<Budget> result)
+        private decimal GetEntireMonthBudget(DateTime start, DateTime end)
         {
-            return result.Where(m =>
+            return _repo.GetAll().Where(m =>
                     int.Parse(m.YearMonth) >= int.Parse(start.AddMonths(1).ToString("yyyyMM")) &&
                     int.Parse(m.YearMonth) <= int.Parse(end.AddMonths(-1).ToString("yyyyMM")))
                 .Sum(m => m.Amount);
         }
 
-        private decimal GetSecondMonthBudget(DateTime end, decimal secondMonthBudget, int endDatePortion)
+        private decimal GetSecondMonthBudget(DateTime end)
         {
-            return secondMonthBudget / GetDays(end) * endDatePortion;
+            return (decimal) _repo.GetAll().FirstOrDefault(x => x.YearMonth == end.ToString("yyyyMM"))?.Amount /
+                GetDays(end) * GetEndDatePortion(end);
         }
 
-        private decimal GetStartMonthBudget(DateTime start, decimal firstMonthBudget, int startDatePortion)
+        private decimal GetStartMonthBudget(DateTime start)
         {
-            return firstMonthBudget / GetDays(start) * startDatePortion;
+            return (decimal) _repo.GetAll().FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount /
+                GetDays(start) * GetStartDatePortion(start);
         }
 
         private static bool IsSameMonth(DateTime start, DateTime end)
