@@ -15,12 +15,7 @@ namespace _20200926BudgetService
 
         public decimal Query(DateTime start, DateTime end)
         {
-            if (start > end)
-            {
-                return 0;
-            }
-
-            if (!_repo.GetAll().Any())
+            if (start > end || !_repo.GetAll().Any())
             {
                 return 0;
             }
@@ -29,7 +24,6 @@ namespace _20200926BudgetService
             if (IsSameDay(start, end))
             {
                 amount = (decimal) _repo.GetAll().FirstOrDefault(x => x.YearMonth == start.ToString("yyyyMM"))?.Amount;
-
                 return amount / GetDays(start);
             }
 
